@@ -77,11 +77,6 @@ bg_color = Color(1, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb3eu"]
 bg_color = Color(0, 1, 0, 1)
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
-properties/0/path = NodePath("PlayerInput:rotation_dir")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3bf3"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -92,6 +87,11 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath(".:player")
 properties/2/spawn = true
 properties/2/replication_mode = 0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
+properties/0/path = NodePath("PlayerInput:rotation_dir")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="Plane" type="Area2D"]
 script = ExtResource("1_l6dxp")
@@ -131,10 +131,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_wb3eu")
 value = 50.0
 show_percentage = false
 
-[node name="PlayerInput" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_b74pb")
-script = ExtResource("1_7iusf")
-
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_left = -1920
 limit_top = -1080
@@ -146,3 +142,7 @@ editor_draw_limits = true
 
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_w3bf3")
+
+[node name="PlayerInput" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_b74pb")
+script = ExtResource("1_7iusf")
