@@ -15,5 +15,4 @@ plane = ExtResource("2_lvitw")
 [node name="Players" type="Node2D" parent="."]
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
 spawn_path = NodePath("../Players")
