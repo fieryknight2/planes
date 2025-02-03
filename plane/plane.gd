@@ -11,7 +11,7 @@ extends Area2D
 @export var max_health := 50.0
 @export var regen_speed := 10.0
 
-var health = max_health
+@export var health = max_health
 
 @export var outof_bounds : Vector4i
 
