@@ -9,7 +9,6 @@ func _physics_process(delta: float) -> void:
 		if vignette:
 			if $Area.has_overlapping_areas():
 				for value: Area2D in $Area.get_overlapping_areas():
-					get_multiplayer_authority() == multiplayer.get_unique_id()
 					if value.has_method("is_local_player"):
 						if value.is_local_player():
 							vignette.visible = true
