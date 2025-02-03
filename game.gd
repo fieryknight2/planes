@@ -9,7 +9,7 @@ func _ready() -> void:
 	
 	if not multiplayer.is_server():
 		return
-		
+	
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
 	

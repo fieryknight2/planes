@@ -5,6 +5,7 @@ var peer = null
 var players = {}
 
 @export var default_game: PackedScene
+@export var default_level: PackedScene
 
 func _ready():
 	if Network.peer == null:
@@ -39,6 +40,8 @@ func _on_connect_pressed() -> void:
 	
 	$UI/Control/Connect.visible = false
 	get_tree().paused = false
+	
+	start_game()
 
 func _on_start_server_pressed() -> void:
 	%ConnectError.visible = false
@@ -58,6 +61,8 @@ func _on_start_server_pressed() -> void:
 	$UI/Control/Connect.visible = false
 	get_tree().paused = false
 	
+	start_game()
+	
 func start_game():
 	$UI/Control/Connect.visible = false
 	get_tree().paused = false
@@ -65,7 +70,15 @@ func start_game():
 	if not multiplayer.is_server():
 		return
 	
-	# change_level(default_game)
+	for child in $Game/SubViewportContainer/SubViewport.get_children():
+		$Game/SubViewportContainer/SubViewport.remove_child(child)
+	
+	var game = default_game.instantiate()
+	game.vignette = $Effects/Control/Color
+		
+	$Game/SubViewportContainer/SubViewport.add_child(game)
+	
+	# change_level(default_level)
 
 func change_level(scene: PackedScene):
 	var level = $Game/SubViewportContainer/SubViewport/Game

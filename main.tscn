@@ -15,7 +15,8 @@ fill_from = Vector2(0.5, 0.5)
 [node name="Main" type="Node"]
 script = ExtResource("1_dvlhr")
 max_clients = 5
-default_game = ExtResource("2_d1lnq")
+default_game = ExtResource("2_26cyq")
+default_level = ExtResource("2_d1lnq")
 
 [node name="Effects" type="CanvasLayer" parent="."]
 layer = 2
@@ -60,8 +61,7 @@ handle_input_locally = false
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="Game" parent="Game/SubViewportContainer/SubViewport" node_paths=PackedStringArray("vignette") instance=ExtResource("2_26cyq")]
-vignette = NodePath("../../../../Effects/Control/Color")
+[node name="Background" parent="Game/SubViewportContainer/SubViewport" instance=ExtResource("2_d1lnq")]
 
 [node name="UI" type="CanvasLayer" parent="."]
 process_mode = 3
@@ -140,11 +140,9 @@ text = "Start Server
 "
 
 [node name="EnvSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://env/background.tscn")
-spawn_path = NodePath("../Game/SubViewportContainer/SubViewport/Game")
+_spawnable_scenes = PackedStringArray("res://env/background.tscn", "res://game.tscn")
+spawn_path = NodePath("../Game/SubViewportContainer/SubViewport")
 spawn_limit = 1
 
 [connection signal="pressed" from="UI/Control/Connect/MarginContainer/VBoxContainer/Buttons/Connect" to="." method="_on_connect_pressed"]
 [connection signal="pressed" from="UI/Control/Connect/MarginContainer/VBoxContainer/Buttons/StartServer" to="." method="_on_start_server_pressed"]
-
-[editable path="Game/SubViewportContainer/SubViewport/Game"]
