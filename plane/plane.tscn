@@ -1,0 +1,136 @@
+[gd_scene load_steps=15 format=3 uid="uid://byr60n2pw8euj"]
+
+[ext_resource type="Script" path="res://plane/player.gd" id="1_7iusf"]
+[ext_resource type="Script" path="res://plane/plane.gd" id="1_l6dxp"]
+[ext_resource type="Texture2D" uid="uid://ua8w7wdujfu5" path="res://plane/plane-right.png" id="3_ujp8o"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
+radius = 88.0511
+
+[sub_resource type="Gradient" id="Gradient_1ln2y"]
+offsets = PackedFloat32Array(0.00215054, 1)
+colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3b6ou"]
+gradient = SubResource("Gradient_1ln2y")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_66qst"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+direction = Vector3(0, 1, 0)
+spread = 20.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -50.29
+linear_accel_max = -16.26
+damping_min = 21.172
+damping_max = 32.325
+attractor_interaction_enabled = false
+scale_max = 4.0
+scale_over_velocity_min = 115.31
+scale_over_velocity_max = 255.2
+color = Color(1, 1, 0, 1)
+color_ramp = SubResource("GradientTexture1D_3b6ou")
+hue_variation_min = -0.07
+hue_variation_max = 0.04
+collision_mode = 2
+
+[sub_resource type="Animation" id="Animation_hitc3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite/Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_54wsn"]
+resource_name = "damage"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite/Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mv22u"]
+_data = {
+"RESET": SubResource("Animation_hitc3"),
+"damage": SubResource("Animation_54wsn")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrsxs"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb3eu"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3bf3"]
+
+[node name="Plane" type="Area2D"]
+script = ExtResource("1_l6dxp")
+speed = 600
+rotate_speed = 5
+outof_bounds = Vector4i(-1920, -1080, 1080, 1920)
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_43ymf")
+
+[node name="Sprite" type="Node2D" parent="."]
+
+[node name="jet" type="GPUParticles2D" parent="Sprite"]
+position = Vector2(-25, 0)
+rotation = 1.5708
+amount = 25
+process_material = SubResource("ParticleProcessMaterial_66qst")
+lifetime = 0.2
+visibility_rect = Rect2(-100, 0, 200, 200)
+
+[node name="Sprite" type="Sprite2D" parent="Sprite"]
+scale = Vector2(0.25, 0.5)
+texture = ExtResource("3_ujp8o")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mv22u")
+}
+
+[node name="Health" type="ProgressBar" parent="."]
+offset_left = -50.0
+offset_top = -45.0
+offset_right = 50.0
+offset_bottom = -40.0
+theme_override_styles/background = SubResource("StyleBoxFlat_rrsxs")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wb3eu")
+value = 50.0
+show_percentage = false
+
+[node name="PlayerInput" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_b74pb")
+script = ExtResource("1_7iusf")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_left = -1920
+limit_top = -1080
+limit_right = 1920
+limit_bottom = 1080
+limit_smoothed = true
+position_smoothing_enabled = true
+editor_draw_limits = true
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_w3bf3")

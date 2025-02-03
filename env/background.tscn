@@ -1,0 +1,255 @@
+[gd_scene load_steps=29 format=3 uid="uid://bdqdmkq3ek5np"]
+
+[ext_resource type="Script" path="res://env/sun.gd" id="1_2ec1g"]
+[ext_resource type="Script" path="res://env/background.gd" id="1_i73fq"]
+[ext_resource type="Texture2D" uid="uid://dju0lx6pyirvg" path="res://env/clouds/cloud-1.png" id="2_0ycrh"]
+[ext_resource type="Shader" path="res://env/water.gdshader" id="2_hitko"]
+[ext_resource type="Texture2D" uid="uid://cxsfnj4qnfac2" path="res://env/clouds/cloud-2.png" id="3_734a4"]
+[ext_resource type="Texture2D" uid="uid://bil32tdnvy8ct" path="res://env/clouds/cloud-3.png" id="4_q6rqg"]
+[ext_resource type="Texture2D" uid="uid://b87o5es5pmj81" path="res://env/clouds/cloud-4.png" id="5_kpc2h"]
+[ext_resource type="Texture2D" uid="uid://bpd580hhjurj6" path="res://env/clouds/cloud-5.png" id="6_b2bm3"]
+
+[sub_resource type="Gradient" id="Gradient_tu4xs"]
+colors = PackedColorArray(0.449608, 0.829336, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4y1ys"]
+gradient = SubResource("Gradient_tu4xs")
+width = 3840
+height = 2160
+use_hdr = true
+fill_from = Vector2(0.516827, 0)
+fill_to = Vector2(0.517, 1)
+repeat = 1
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_laku5"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1, 800, 1)
+direction = Vector3(-1, 0, 0)
+spread = 0.0
+flatness = 1.0
+initial_velocity_min = 62.46
+initial_velocity_max = 99.5
+gravity = Vector3(0, 0, 0)
+color = Color(1, 1, 1, 0.8)
+sub_emitter_keep_velocity = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aw4kx"]
+shader = ExtResource("2_hitko")
+shader_parameter/shift = 5.0
+shader_parameter/speed = 4.0
+shader_parameter/amplitude = 125.0
+
+[sub_resource type="Gradient" id="Gradient_7nyax"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(4.52429e-06, 0.800615, 0.751911, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ndpm8"]
+gradient = SubResource("Gradient_7nyax")
+width = 1920
+height = 1080
+use_hdr = true
+repeat = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a7ifx"]
+shader = ExtResource("2_hitko")
+shader_parameter/shift = 3.0
+shader_parameter/speed = 5.0
+shader_parameter/amplitude = 100.0
+
+[sub_resource type="Gradient" id="Gradient_h4hf1"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0.57504, 0.642071, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_730q1"]
+gradient = SubResource("Gradient_h4hf1")
+width = 1920
+height = 1080
+use_hdr = true
+repeat = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_acdc5"]
+shader = ExtResource("2_hitko")
+shader_parameter/shift = 2.0
+shader_parameter/speed = 8.0
+shader_parameter/amplitude = 75.0
+
+[sub_resource type="Gradient" id="Gradient_vpe41"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.209543, 0.773228, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3goxj"]
+gradient = SubResource("Gradient_vpe41")
+width = 1920
+height = 1080
+use_hdr = true
+repeat = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnfv5"]
+shader = ExtResource("2_hitko")
+shader_parameter/shift = 2.0
+shader_parameter/speed = 5.0
+shader_parameter/amplitude = 40.0
+
+[sub_resource type="Gradient" id="Gradient_g223b"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.00412371)
+colors = PackedColorArray(2.59906e-06, 0.686742, 0.765657, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_prm8q"]
+gradient = SubResource("Gradient_g223b")
+width = 1920
+height = 1080
+use_hdr = true
+repeat = 1
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p8r73"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_neole"]
+normal = Vector2(0.999973, -0.00732581)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jr4xt"]
+normal = Vector2(-0.999985, 0.00549442)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_s3nm5"]
+normal = Vector2(0.0110186, 0.999939)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_r1yp4"]
+
+[node name="Outside" type="Node2D" groups=["Level"]]
+script = ExtResource("1_i73fq")
+outside_of_area_damage = 60.0
+
+[node name="Sky" type="Parallax2D" parent="."]
+repeat_times = 3
+
+[node name="Sky" type="Sprite2D" parent="Sky"]
+z_index = -100
+texture = SubResource("GradientTexture2D_4y1ys")
+
+[node name="Sun" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="Sun" type="Node2D" parent="Sun"]
+position = Vector2(444, 352)
+script = ExtResource("1_2ec1g")
+size = 256
+color = Color(0.999002, 0.976629, 0.92718, 1)
+
+[node name="CloudsA" type="Parallax2D" parent="."]
+z_index = 2
+
+[node name="Particles1" type="GPUParticles2D" parent="CloudsA"]
+position = Vector2(2377, -11)
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_laku5")
+texture = ExtResource("2_0ycrh")
+lifetime = 80.0
+preprocess = 60.0
+randomness = 1.0
+visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
+draw_order = 0
+
+[node name="Particles2" type="GPUParticles2D" parent="CloudsA"]
+position = Vector2(2377, 0)
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_laku5")
+texture = ExtResource("3_734a4")
+lifetime = 80.0
+preprocess = 50.0
+randomness = 1.0
+visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
+draw_order = 0
+
+[node name="Particles3" type="GPUParticles2D" parent="CloudsA"]
+position = Vector2(2377, 0)
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_laku5")
+texture = ExtResource("4_q6rqg")
+lifetime = 80.0
+preprocess = 40.0
+randomness = 1.0
+visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
+draw_order = 0
+
+[node name="Particles4" type="GPUParticles2D" parent="CloudsA"]
+position = Vector2(2377, 0)
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_laku5")
+texture = ExtResource("5_kpc2h")
+lifetime = 80.0
+preprocess = 30.0
+randomness = 1.0
+visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
+draw_order = 0
+
+[node name="Particles5" type="GPUParticles2D" parent="CloudsA"]
+position = Vector2(2377, 0)
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_laku5")
+texture = ExtResource("6_b2bm3")
+lifetime = 80.0
+preprocess = 20.0
+randomness = 1.0
+visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
+draw_order = 0
+
+[node name="Water" type="Parallax2D" parent="."]
+
+[node name="WaveSet" type="Node2D" parent="Water"]
+modulate = Color(1, 1, 1, 0.584314)
+top_level = true
+z_index = 2
+position = Vector2(0, 1441)
+scale = Vector2(8, 1)
+
+[node name="Wave" type="Polygon2D" parent="Water/WaveSet"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_aw4kx")
+texture = SubResource("GradientTexture2D_ndpm8")
+polygon = PackedVector2Array(-240, 512, -240, -512, -180, -512, -120, -512, -60, -512, 0, -512, 60, -512, 120, -512, 180, -512, 240, -512, 240, 512)
+
+[node name="Wave2" type="Polygon2D" parent="Water/WaveSet"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_a7ifx")
+texture = SubResource("GradientTexture2D_730q1")
+polygon = PackedVector2Array(-240, 512, -240, -512, -180, -512, -120, -512, -60, -512, 0, -512, 60, -512, 120, -512, 180, -512, 240, -512, 240, 512)
+
+[node name="Wave3" type="Polygon2D" parent="Water/WaveSet"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_acdc5")
+texture = SubResource("GradientTexture2D_3goxj")
+polygon = PackedVector2Array(-240, 512, -240, -512, -180, -512, -120, -512, -60, -512, 0, -512, 60, -512, 120, -512, 180, -512, 240, -512, 240, 512)
+
+[node name="Wave4" type="Polygon2D" parent="Water/WaveSet"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_jnfv5")
+texture = SubResource("GradientTexture2D_prm8q")
+polygon = PackedVector2Array(-240, 512, -240, -480, -180, -480, -120, -480, -60, -480, 0, -480, 60, -480, 120, -480, 180, -480, 240, -480, 240, 512)
+
+[node name="Area2D" type="Area2D" parent="Water/WaveSet"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Water/WaveSet/Area2D"]
+position = Vector2(4.375, -533)
+shape = SubResource("WorldBoundaryShape2D_p8r73")
+
+[node name="Area" type="Area2D" parent="."]
+
+[node name="Walls4" type="CollisionShape2D" parent="Area"]
+position = Vector2(-1810, 0)
+shape = SubResource("WorldBoundaryShape2D_neole")
+
+[node name="Walls3" type="CollisionShape2D" parent="Area"]
+position = Vector2(1793, 0)
+shape = SubResource("WorldBoundaryShape2D_jr4xt")
+
+[node name="Walls2" type="CollisionShape2D" parent="Area"]
+position = Vector2(0, -979)
+shape = SubResource("WorldBoundaryShape2D_s3nm5")
+
+[node name="Walls" type="CollisionShape2D" parent="Area"]
+position = Vector2(0, 1021)
+shape = SubResource("WorldBoundaryShape2D_r1yp4")

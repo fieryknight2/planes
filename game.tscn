@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2g4mn0tipq0i"]
+
+[ext_resource type="PackedScene" uid="uid://bdqdmkq3ek5np" path="res://env/background.tscn" id="1_aeete"]
+[ext_resource type="Script" path="res://game.gd" id="1_c768h"]
+[ext_resource type="PackedScene" uid="uid://byr60n2pw8euj" path="res://plane/plane.tscn" id="2_lvitw"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_c768h")
+plane = ExtResource("2_lvitw")
+
+[node name="Background" parent="." instance=ExtResource("1_aeete")]
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
+spawn_path = NodePath("../Players")
