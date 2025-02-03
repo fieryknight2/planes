@@ -7,7 +7,6 @@ extends Node2D
 func _ready() -> void:
 	$Background.vignette = vignette
 	
-	
 	if not multiplayer.is_server():
 		return
 		
