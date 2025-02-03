@@ -78,6 +78,9 @@ bg_color = Color(1, 0, 0, 1)
 bg_color = Color(0, 1, 0, 1)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
+properties/0/path = NodePath("PlayerInput:rotation_dir")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3bf3"]
 properties/0/path = NodePath(".:position")
