@@ -36,10 +36,10 @@ func connect_to_server(address, port):
 	return true
 
 func _on_player_connected(id):
-	print("Player " + str(id) + " has connected")
+	pass # print("Player " + str(id) + " has connected")
 
 func _on_player_disconnected(id):
-	print("Player " + str(id) + " has disconnected")
+	pass # print("Player " + str(id) + " has disconnected")
 
 func _on_connected_ok():
 	pass

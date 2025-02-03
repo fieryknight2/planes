@@ -7,7 +7,9 @@ extends Node2D
 func _physics_process(delta: float) -> void:
 	if vignette:
 		if $Area.has_overlapping_areas():
-			vignette.visible = true
+			for value: Area2D in $Area.get_overlapping_areas():
+				if value.name == str(multiplayer.get_unique_id()):
+					vignette.visible = true
 		else:
 			vignette.visible = false
 	for value: Area2D in $Area.get_overlapping_areas():
