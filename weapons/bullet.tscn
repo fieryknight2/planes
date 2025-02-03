@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://cc77ys66yjgai"]
+
+[ext_resource type="Texture2D" uid="uid://q2feyw120opw" path="res://weapons/weapon.png" id="1_7kxew"]
+[ext_resource type="Script" path="res://weapons/bullet.gd" id="1_8yrn4"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0pfaq"]
+emission_shape_scale = Vector3(0, 0, 0)
+spread = 0.0
+initial_velocity_min = 300.57
+initial_velocity_max = 300.57
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.05
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fl87l"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gmfl6"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:from_player")
+properties/2/spawn = true
+properties/2/replication_mode = 0
+
+[node name="Bullet" type="Area2D"]
+z_index = -1
+script = ExtResource("1_8yrn4")
+bullet_speed = 2000.0
+bullet_damage = 10
+bullet_existence_time = 1.0
+
+[node name="CPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = -2
+position = Vector2(12, 0)
+amount = 32
+process_material = SubResource("ParticleProcessMaterial_0pfaq")
+texture = ExtResource("1_7kxew")
+lifetime = 0.1
+fixed_fps = 0
+visibility_rect = Rect2(-200, -100, 200, 200)
+draw_order = 0
+
+[node name="Image" type="Sprite2D" parent="."]
+position = Vector2(-5, 0)
+scale = Vector2(0.0253907, 0.06875)
+texture = ExtResource("1_7kxew")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(11, 0)
+rotation = 1.5708
+shape = SubResource("CircleShape2D_fl87l")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_gmfl6")

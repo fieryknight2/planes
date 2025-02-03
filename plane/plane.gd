@@ -1,7 +1,8 @@
 extends Area2D
 
 @export var speed := 250
-@export var rotate_speed := 6
+@export var rotate_speed : float = 4
+@export var follow_mouse_speed : float = 20
 
 @export var rotating_tex : Texture2D
 @export var sideways_tex : Texture2D
@@ -14,6 +15,15 @@ extends Area2D
 @export var health = max_health
 
 @export var outof_bounds : Vector4i
+
+@export var mouse_dist : float
+@export var mouse_dist_threshold : float
+
+@export var firing_speed : float = 1
+@export var weapon1 : PackedScene
+var wait_time = 0
+
+@export var bullet_node: NodePath
 
 @export var player := 1 : 
 	set(id): 
@@ -29,11 +39,22 @@ func _ready():
 
 func is_local_player() -> bool:
 	return player == multiplayer.get_unique_id()
-	
+
+func get_id():
+	return player
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var rot_dir = clamp($PlayerInput.rotation_dir, -1, 1)
-	$Sprite.rotation += rot_dir * rotate_speed * delta
+	wait_time += delta
+	if not $PlayerInput.use_mouse:
+		var rot_dir = clamp($PlayerInput.rotation_dir, -1, 1)
+		$Sprite.rotation += rot_dir * rotate_speed * delta
+	else:
+		var effect = clamp(($PlayerInput.target_pos - position).length_squared() / pow(mouse_dist_threshold, 2), 0, 1)
+		var prev_rotation = $Sprite.rotation
+		$Sprite.rotation = global_position.angle_to_point($PlayerInput.target_pos)
+		$Sprite.rotation = lerp_angle(prev_rotation, get_angle_to($PlayerInput.target_pos), delta * follow_mouse_speed * effect)
+	
 	var direction_dir = Vector2.from_angle($Sprite.rotation)
 	
 	while $Sprite.rotation_degrees > 360:
@@ -45,8 +66,13 @@ func _process(delta: float) -> void:
 	else:
 		$Sprite/Sprite.flip_v = false
 	
-	var direction_velocity = direction_dir * speed * delta
+	var cspeed = clamp((($PlayerInput.target_pos - position)).length_squared() / pow(mouse_dist, 2), 0, 1) * speed if $PlayerInput.use_mouse else speed
+	var direction_velocity = direction_dir * cspeed * delta
 	position += direction_velocity
+	
+	if wait_time > firing_speed and $PlayerInput.firing:
+		fire()
+		wait_time = 0
 	
 	health += regen_speed * delta
 	health = clamp(health, 0, max_health)
@@ -66,8 +92,15 @@ func _process(delta: float) -> void:
 func die():
 	position = Vector2(0, 0)
 	health = max_health
+	$Health.value = health
 
 func take_damage(damage):
 	health -= damage
 	$AnimationPlayer.play("damage")
-	
+
+func fire():
+	var bullet = weapon1.instantiate()
+	bullet.rotation = $Sprite.rotation
+	bullet.position = $Sprite/FireLocation.global_position
+	bullet.from_player = player
+	get_node(bullet_node).add_child(bullet, true)

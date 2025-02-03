@@ -5,7 +5,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Background.vignette = vignette
+	$Background.get_child(0).vignette = vignette
 	
 	if not multiplayer.is_server():
 		return
@@ -24,6 +24,7 @@ func add_player(id):
 	var nplayer = plane.instantiate()
 	nplayer.player = id
 	nplayer.name = str(id)
+	nplayer.bullet_node = $Bullets.get_path()
 	$Players.add_child(nplayer, true)
 
 func remove_player(id):

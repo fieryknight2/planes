@@ -8,10 +8,23 @@
 script = ExtResource("1_c768h")
 plane = ExtResource("2_lvitw")
 
-[node name="Background" parent="." instance=ExtResource("1_aeete")]
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Background" parent="Background" instance=ExtResource("1_aeete")]
 
 [node name="Players" type="Node2D" parent="."]
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+[node name="Bullets" type="Node2D" parent="."]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
 spawn_path = NodePath("../Players")
+
+[node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://weapons/bullet.tscn")
+spawn_path = NodePath("../Bullets")
+
+[node name="BackgroundSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://env/background.tscn")
+spawn_path = NodePath("../Background")
+spawn_limit = 1

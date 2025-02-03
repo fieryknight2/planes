@@ -1,11 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://byr60n2pw8euj"]
+[gd_scene load_steps=16 format=3 uid="uid://byr60n2pw8euj"]
 
 [ext_resource type="Script" path="res://plane/player.gd" id="1_7iusf"]
 [ext_resource type="Script" path="res://plane/plane.gd" id="1_l6dxp"]
+[ext_resource type="PackedScene" uid="uid://cc77ys66yjgai" path="res://weapons/bullet.tscn" id="2_b1f6b"]
 [ext_resource type="Texture2D" uid="uid://ua8w7wdujfu5" path="res://plane/plane-right.png" id="3_ujp8o"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
-radius = 88.0511
+radius = 36.0555
 
 [sub_resource type="Gradient" id="Gradient_1ln2y"]
 offsets = PackedFloat32Array(0.00215054, 1)
@@ -90,17 +91,35 @@ properties/2/replication_mode = 0
 properties/3/path = NodePath(".:health")
 properties/3/spawn = true
 properties/3/replication_mode = 1
+properties/4/path = NodePath(".:bullet_node")
+properties/4/spawn = true
+properties/4/replication_mode = 0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
 properties/0/path = NodePath("PlayerInput:rotation_dir")
 properties/0/spawn = true
 properties/0/replication_mode = 1
+properties/1/path = NodePath("PlayerInput:firing")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("PlayerInput:target_pos")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("PlayerInput:use_mouse")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
-[node name="Plane" type="Area2D"]
+[node name="Plane" type="Area2D" groups=["Players"]]
 script = ExtResource("1_l6dxp")
-speed = 600
-rotate_speed = 5
+speed = 800
+rotate_speed = 4.5
+follow_mouse_speed = 15.0
+regen_speed = 1.0
 outof_bounds = Vector4i(-1920, -1080, 1080, 1920)
+mouse_dist = 250.0
+mouse_dist_threshold = 50.0
+firing_speed = 0.2
+weapon1 = ExtResource("2_b1f6b")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_43ymf")
@@ -118,6 +137,9 @@ visibility_rect = Rect2(-100, 0, 200, 200)
 [node name="Sprite" type="Sprite2D" parent="Sprite"]
 scale = Vector2(0.25, 0.5)
 texture = ExtResource("3_ujp8o")
+
+[node name="FireLocation" type="Node2D" parent="Sprite"]
+position = Vector2(51, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

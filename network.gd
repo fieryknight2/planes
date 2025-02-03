@@ -35,10 +35,10 @@ func connect_to_server(address, port):
 	multiplayer.multiplayer_peer = peer
 	return true
 
-func _on_player_connected(id):
+func _on_player_connected(_id):
 	pass # print("Player " + str(id) + " has connected")
 
-func _on_player_disconnected(id):
+func _on_player_disconnected(_id):
 	pass # print("Player " + str(id) + " has disconnected")
 
 func _on_connected_ok():
