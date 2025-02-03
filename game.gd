@@ -13,11 +13,11 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
 	
-	if not OS.has_feature("dedicated_server"):
-		add_player(1)
-	
 	for id in multiplayer.get_peers():
 		add_player(id)
+	
+	if not OS.has_feature("dedicated_server"):
+		add_player(1)
 
 func add_player(id):
 	print("Player " + str(id) + " has connected")
