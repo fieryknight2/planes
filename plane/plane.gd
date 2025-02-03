@@ -24,8 +24,11 @@ func _ready():
 	$Health.max_value = max_health
 	$Health.value = health
 	
-	if player == multiplayer.get_unique_id():
+	if is_local_player():
 		$Camera2D.make_current()
+
+func is_local_player() -> bool:
+	return player == multiplayer.get_unique_id()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
