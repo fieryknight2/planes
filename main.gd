@@ -28,7 +28,7 @@ func _on_connect_pressed() -> void:
 	
 	# Get connection IP address, default to host machine
 	var address = %IP.text
-	if address == "":
+	if address.is_empty():
 		address = "127.0.0.1"
 		
 	var error = Network.connect_to_server(address, port)
@@ -65,7 +65,7 @@ func start_game():
 	if not multiplayer.is_server():
 		return
 	
-	change_level(default_game)
+	# change_level(default_game)
 
 func change_level(scene: PackedScene):
 	var level = $Game/SubViewportContainer/SubViewport/Game

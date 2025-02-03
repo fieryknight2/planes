@@ -13,6 +13,3 @@ plane = ExtResource("2_lvitw")
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Players" type="Node2D" parent="."]
-
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../Players")

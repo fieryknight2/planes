@@ -1,6 +1,6 @@
 extends MultiplayerSynchronizer
 
-@export var rotation_dir : int = 0
+@export var rotation_dir : float = 0
 
 func _ready():
 	if get_multiplayer_authority() == multiplayer.get_unique_id():
