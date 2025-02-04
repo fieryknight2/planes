@@ -13,7 +13,9 @@ func _ready():
 		Network.disconnect_server()
 	else:
 		$UI/Control/Connect.visible = false
-		
+	
+	if DisplayServer.get_name() == "headless":
+		start_game()
 
 func _on_connect_pressed() -> void:
 	%ConnectError.visible = false
