@@ -7,13 +7,15 @@ extends Node2D
 func _physics_process(delta: float) -> void:
 	if not get_tree().paused:
 		if vignette:
+			var player_in_range = false
 			if $Area.has_overlapping_areas():
 				for value: Area2D in $Area.get_overlapping_areas():
-					if value.has_method("is_local_player"):
+					if value.is_in_group("Players"):
 						if value.is_local_player():
-							vignette.visible = true
-			else:
-				vignette.visible = false
+							player_in_range = true
+							break
+			vignette.visible = player_in_range
+			
 		for value: Area2D in $Area.get_overlapping_areas():
-			if value.has_method("take_damage"):
+			if value.is_in_group("Players"):
 				value.take_damage(outside_of_area_damage * delta)
