@@ -14,6 +14,8 @@ func _ready():
 	if DisplayServer.get_name() == "headless":
 		print("Automatically starting dedicated server.")
 		start_server.call_deferred(6381)
+	else:
+		print("Running as client/host")
 
 func start_server(port, max_clients=32):
 	peer = ENetMultiplayerPeer.new()
