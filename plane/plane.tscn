@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://plane/player.gd" id="1_7iusf"]
 [ext_resource type="Script" path="res://plane/plane.gd" id="1_l6dxp"]
 [ext_resource type="PackedScene" uid="uid://cc77ys66yjgai" path="res://weapons/bullet.tscn" id="2_b1f6b"]
-[ext_resource type="Texture2D" uid="uid://ua8w7wdujfu5" path="res://plane/plane-right.png" id="3_ujp8o"]
+[ext_resource type="Texture2D" uid="uid://dhlrhki24hvpt" path="res://plane/triangle.png" id="3_6751r"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
 radius = 36.0555
@@ -20,6 +20,8 @@ lifetime_randomness = 0.4
 particle_flag_disable_z = true
 direction = Vector3(0, 1, 0)
 spread = 20.0
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
 gravity = Vector3(0, 0, 0)
 linear_accel_min = -50.29
 linear_accel_max = -16.26
@@ -40,7 +42,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite/Sprite:modulate")
+tracks/0/path = NodePath("Sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -52,18 +54,18 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_54wsn"]
 resource_name = "damage"
-length = 0.5
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite/Sprite:modulate")
+tracks/0/path = NodePath("Sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.233333, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+"values": [Color(0.539863, 8.66354e-07, 1.92523e-07, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mv22u"]
@@ -101,7 +103,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 properties/1/path = NodePath("PlayerInput:firing")
 properties/1/spawn = true
-properties/1/replication_mode = 1
+properties/1/replication_mode = 2
 properties/2/path = NodePath("PlayerInput:target_pos")
 properties/2/spawn = true
 properties/2/replication_mode = 1
@@ -135,8 +137,9 @@ lifetime = 0.2
 visibility_rect = Rect2(-100, 0, 200, 200)
 
 [node name="Sprite" type="Sprite2D" parent="Sprite"]
-scale = Vector2(0.25, 0.5)
-texture = ExtResource("3_ujp8o")
+rotation = 1.5708
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("3_6751r")
 
 [node name="FireLocation" type="Node2D" parent="Sprite"]
 position = Vector2(51, 0)

@@ -143,7 +143,7 @@ text = "Start Server
 "
 
 [node name="EnvSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://env/background.tscn", "res://game.tscn")
+_spawnable_scenes = PackedStringArray("res://game.tscn", "res://env/background.tscn")
 spawn_path = NodePath("../Game/SubViewportContainer/SubViewport")
 spawn_limit = 1
 

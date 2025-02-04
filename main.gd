@@ -62,26 +62,27 @@ func _on_start_server_pressed() -> void:
 	get_tree().paused = false
 	
 	start_game()
-	
+
+func set_vignette(node):
+	node.vignette = $Effects/Control/Color
+
 func start_game():
 	$UI/Control/Connect.visible = false
 	get_tree().paused = false
 	
-	if not multiplayer.is_server():
-		return
-	
 	for child in $Game/SubViewportContainer/SubViewport.get_children():
 		$Game/SubViewportContainer/SubViewport.remove_child(child)
 	
+	if not multiplayer.is_server():
+		return
+	
 	var game = default_game.instantiate()
-	game.vignette = $Effects/Control/Color
-		
 	$Game/SubViewportContainer/SubViewport.add_child(game)
 	
 	# change_level(default_level)
 
 func change_level(scene: PackedScene):
-	var level = $Game/SubViewportContainer/SubViewport/Game
+	var level = $Game/SubViewportContainer/SubViewport.get_child(0)
 	for lev in level.get_children():
 		if lev.is_in_group("Level"):
 			level.remove_child(lev)

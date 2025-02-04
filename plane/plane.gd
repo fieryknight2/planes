@@ -36,6 +36,8 @@ func _ready():
 	
 	if is_local_player():
 		$Camera2D.make_current()
+	else:
+		$Sprite/Sprite.modulate = Color.CHARTREUSE
 
 func is_local_player() -> bool:
 	return player == multiplayer.get_unique_id()
@@ -62,9 +64,9 @@ func _process(delta: float) -> void:
 	while $Sprite.rotation_degrees < 0:
 		$Sprite.rotation_degrees += 360
 	if $Sprite.rotation_degrees >= 90 and $Sprite.rotation_degrees <= 270:
-		$Sprite/Sprite.flip_v = true
+		pass # $Sprite/Sprite.flip_v = true
 	else:
-		$Sprite/Sprite.flip_v = false
+		pass # $Sprite/Sprite.flip_v = false
 	
 	var cspeed = clamp((($PlayerInput.target_pos - position)).length_squared() / pow(mouse_dist, 2), 0, 1) * speed if $PlayerInput.use_mouse else speed
 	var direction_velocity = direction_dir * cspeed * delta
@@ -98,9 +100,17 @@ func take_damage(damage):
 	health -= damage
 	$AnimationPlayer.play("damage")
 
+var bid = 0
 func fire():
 	var bullet = weapon1.instantiate()
 	bullet.rotation = $Sprite.rotation
 	bullet.position = $Sprite/FireLocation.global_position
 	bullet.from_player = player
+	bullet.name = str(player) + "_" + str(bid)
+	bid += 1
 	get_node(bullet_node).add_child(bullet, true)
+
+func pick_up_crate(value):
+	if value == "health":
+		health += max_health / 2
+		health = clamp(health, 0, max_health)

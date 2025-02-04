@@ -3,8 +3,12 @@ extends Node2D
 @export var vignette: Node
 @export var plane: PackedScene
 
+@export var crate_time: float
+@export var crate: PackedScene
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_tree().current_scene.set_vignette(self)
 	$Background.get_child(0).vignette = vignette
 	
 	if not multiplayer.is_server():
@@ -18,6 +22,17 @@ func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server"):
 		add_player(1)
+	
+	new_crate()
+
+func new_crate():
+	get_tree().create_timer(crate_time).connect("timeout", new_crate)
+	
+	var ncrate = crate.instantiate()
+	ncrate.position.x = randi_range(-1800, 1800)
+	ncrate.position.y = -1200
+	ncrate.m_type = "health"
+	$Crates.add_child(ncrate, true)
 
 func add_player(id):
 	print("Player " + str(id) + " has connected")

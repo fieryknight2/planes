@@ -1,12 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2g4mn0tipq0i"]
+[gd_scene load_steps=5 format=3 uid="uid://c2g4mn0tipq0i"]
 
 [ext_resource type="PackedScene" uid="uid://bdqdmkq3ek5np" path="res://env/background.tscn" id="1_aeete"]
 [ext_resource type="Script" path="res://game.gd" id="1_c768h"]
 [ext_resource type="PackedScene" uid="uid://byr60n2pw8euj" path="res://plane/plane.tscn" id="2_lvitw"]
+[ext_resource type="PackedScene" uid="uid://csv35kxslwnt6" path="res://crates/crate.tscn" id="3_34whb"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_c768h")
 plane = ExtResource("2_lvitw")
+crate_time = 5.0
+crate = ExtResource("3_34whb")
 
 [node name="Background" type="Node2D" parent="."]
 
@@ -16,15 +19,21 @@ plane = ExtResource("2_lvitw")
 
 [node name="Bullets" type="Node2D" parent="."]
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
-spawn_path = NodePath("../Players")
-
-[node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://weapons/bullet.tscn")
-spawn_path = NodePath("../Bullets")
+[node name="Crates" type="Node2D" parent="."]
 
 [node name="BackgroundSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://env/background.tscn")
 spawn_path = NodePath("../Background")
 spawn_limit = 1
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
+spawn_path = NodePath("../Players")
+
+[node name="CrateSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://crates/crate.tscn")
+spawn_path = NodePath("../Crates")
+
+[node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://weapons/bullet.tscn")
+spawn_path = NodePath("../Bullets")
