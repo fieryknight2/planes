@@ -57,18 +57,13 @@ func _process(delta: float) -> void:
 		$Sprite.rotation = global_position.angle_to_point($PlayerInput.target_pos)
 		$Sprite.rotation = lerp_angle(prev_rotation, get_angle_to($PlayerInput.target_pos), delta * follow_mouse_speed * effect)
 	
-	var direction_dir = Vector2.from_angle($Sprite.rotation)
-	
-	while $Sprite.rotation_degrees > 360:
-		$Sprite.rotation_degrees -= 360
-	while $Sprite.rotation_degrees < 0:
-		$Sprite.rotation_degrees += 360
-	if $Sprite.rotation_degrees >= 90 and $Sprite.rotation_degrees <= 270:
-		pass # $Sprite/Sprite.flip_v = true
-	else:
-		pass # $Sprite/Sprite.flip_v = false
+	# TODO: Fix this
+	# var rot = abs(fmod($Sprite.rotation, PI / 2))
+	# var uscale = 0.05 * cos(rot - (PI/4))
+	# $Sprite/Sprite.scale.x = 0.15 + uscale
 	
 	var cspeed = clamp((($PlayerInput.target_pos - position)).length_squared() / pow(mouse_dist, 2), 0, 1) * speed if $PlayerInput.use_mouse else speed
+	var direction_dir = Vector2.from_angle($Sprite.rotation)
 	var direction_velocity = direction_dir * cspeed * delta
 	position += direction_velocity
 	

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://plane/player.gd" id="1_7iusf"]
 [ext_resource type="Script" path="res://plane/plane.gd" id="1_l6dxp"]
 [ext_resource type="PackedScene" uid="uid://cc77ys66yjgai" path="res://weapons/bullet.tscn" id="2_b1f6b"]
-[ext_resource type="Texture2D" uid="uid://dhlrhki24hvpt" path="res://plane/triangle.png" id="3_6751r"]
+[ext_resource type="Texture2D" uid="uid://day8ateb7lrvr" path="res://plane/plane2.png" id="3_h4w56"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
 radius = 36.0555
@@ -138,8 +138,8 @@ visibility_rect = Rect2(-100, 0, 200, 200)
 
 [node name="Sprite" type="Sprite2D" parent="Sprite"]
 rotation = 1.5708
-scale = Vector2(0.15, 0.15)
-texture = ExtResource("3_6751r")
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_h4w56")
 
 [node name="FireLocation" type="Node2D" parent="Sprite"]
 position = Vector2(51, 0)
