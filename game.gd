@@ -20,7 +20,7 @@ func _ready() -> void:
 	for id in multiplayer.get_peers():
 		add_player(id)
 	
-	if not OS.has_feature("dedicated_server"):
+	if not OS.has_feature("dedicated_server") and not DisplayServer.get_name() == "headless":
 		add_player(1)
 	
 	new_crate()
