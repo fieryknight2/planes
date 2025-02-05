@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bdqdmkq3ek5np"]
+[gd_scene load_steps=28 format=3 uid="uid://bdqdmkq3ek5np"]
 
 [ext_resource type="Script" path="res://env/sun.gd" id="1_2ec1g"]
 [ext_resource type="Script" path="res://env/background.gd" id="1_i73fq"]
@@ -106,8 +106,6 @@ height = 1080
 use_hdr = true
 repeat = 1
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p8r73"]
-
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_neole"]
 normal = Vector2(0.999973, -0.00732581)
 
@@ -118,6 +116,7 @@ normal = Vector2(-0.999985, 0.00549442)
 normal = Vector2(0.0110186, 0.999939)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_r1yp4"]
+distance = 100.0
 
 [node name="Outside" type="Node2D" groups=["Level"]]
 script = ExtResource("1_i73fq")
@@ -230,12 +229,6 @@ texture_repeat = 2
 material = SubResource("ShaderMaterial_jnfv5")
 texture = SubResource("GradientTexture2D_prm8q")
 polygon = PackedVector2Array(-240, 512, -240, -480, -180, -480, -120, -480, -60, -480, 0, -480, 60, -480, 120, -480, 180, -480, 240, -480, 240, 512)
-
-[node name="Area2D" type="Area2D" parent="Water/WaveSet"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Water/WaveSet/Area2D"]
-position = Vector2(4.375, -533)
-shape = SubResource("WorldBoundaryShape2D_p8r73")
 
 [node name="Area" type="Area2D" parent="."]
 

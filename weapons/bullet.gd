@@ -9,7 +9,7 @@ var remaining_time = 0.0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var direction = Vector2.from_angle(rotation)
+	var direction = Vector2.from_angle(global_rotation)
 	position += direction * delta * bullet_speed
 	
 	remaining_time += delta

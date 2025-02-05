@@ -4,6 +4,7 @@ extends Node2D
 @export var plane: PackedScene
 
 @export var crate_time: float
+@export var crate_types: Array[String]
 @export var crate: PackedScene
 
 # Called when the node enters the scene tree for the first time.
@@ -31,7 +32,7 @@ func new_crate():
 	var ncrate = crate.instantiate()
 	ncrate.position.x = randi_range(-1800, 1800)
 	ncrate.position.y = -1200
-	ncrate.m_type = "health"
+	ncrate.m_type = crate_types.pick_random()
 	$Crates.add_child(ncrate, true)
 
 func add_player(id):

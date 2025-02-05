@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://duhafeoh7usc6"
-path="res://.godot/imported/mutlishot.png-e0b9ad51d86d10a9c6e1835cb3c5ce6b.ctex"
+uid="uid://du27fao687pny"
+path="res://.godot/imported/multishot.png-e23ea4b71b701fc66cf4b2295f425eaa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://crates/mutlishot.png"
-dest_files=["res://.godot/imported/mutlishot.png-e0b9ad51d86d10a9c6e1835cb3c5ce6b.ctex"]
+source_file="res://crates/multishot.png"
+dest_files=["res://.godot/imported/multishot.png-e23ea4b71b701fc66cf4b2295f425eaa.ctex"]
 
 [params]
 

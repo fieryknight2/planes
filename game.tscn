@@ -9,6 +9,7 @@
 script = ExtResource("1_c768h")
 plane = ExtResource("2_lvitw")
 crate_time = 5.0
+crate_types = Array[String](["health", "multishot", "powershot"])
 crate = ExtResource("3_34whb")
 
 [node name="Background" type="Node2D" parent="."]

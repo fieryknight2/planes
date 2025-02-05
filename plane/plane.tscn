@@ -1,9 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://byr60n2pw8euj"]
+[gd_scene load_steps=19 format=3 uid="uid://byr60n2pw8euj"]
 
 [ext_resource type="Script" path="res://plane/player.gd" id="1_7iusf"]
 [ext_resource type="Script" path="res://plane/plane.gd" id="1_l6dxp"]
 [ext_resource type="PackedScene" uid="uid://cc77ys66yjgai" path="res://weapons/bullet.tscn" id="2_b1f6b"]
 [ext_resource type="Texture2D" uid="uid://day8ateb7lrvr" path="res://plane/plane2.png" id="3_h4w56"]
+[ext_resource type="PackedScene" uid="uid://dwxdhkg23e2ua" path="res://weapons/multishot.tscn" id="3_sy2qg"]
+[ext_resource type="PackedScene" uid="uid://g85mjlehip7i" path="res://weapons/powershot.tscn" id="4_6uvsg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
 radius = 36.0555
@@ -36,6 +38,12 @@ color_ramp = SubResource("GradientTexture1D_3b6ou")
 hue_variation_min = -0.07
 hue_variation_max = 0.04
 collision_mode = 2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6qaon"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
 
 [sub_resource type="Animation" id="Animation_hitc3"]
 length = 0.001
@@ -96,6 +104,12 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath(".:bullet_node")
 properties/4/spawn = true
 properties/4/replication_mode = 0
+properties/5/path = NodePath(".:bullet_type")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath(".:firing_speed")
+properties/6/spawn = true
+properties/6/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
 properties/0/path = NodePath("PlayerInput:rotation_dir")
@@ -121,7 +135,10 @@ outof_bounds = Vector4i(-1920, -1080, 1080, 1920)
 mouse_dist = 250.0
 mouse_dist_threshold = 50.0
 firing_speed = 0.2
-weapon1 = ExtResource("2_b1f6b")
+default_weapon = ExtResource("2_b1f6b")
+multishot_weapon = ExtResource("3_sy2qg")
+powershot_weapon = ExtResource("4_6uvsg")
+power_length = 10.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_43ymf")
@@ -140,6 +157,22 @@ visibility_rect = Rect2(-100, 0, 200, 200)
 rotation = 1.5708
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("3_h4w56")
+
+[node name="Trails" type="GPUParticles2D" parent="Sprite/Sprite"]
+position = Vector2(-89.9998, 50.0003)
+rotation = -1.5708
+scale = Vector2(5, 5)
+amount = 150
+process_material = SubResource("ParticleProcessMaterial_6qaon")
+lifetime = 0.5
+
+[node name="Trails2" type="GPUParticles2D" parent="Sprite/Sprite"]
+position = Vector2(85.0002, 49.9997)
+rotation = -1.5708
+scale = Vector2(5, 5)
+amount = 150
+process_material = SubResource("ParticleProcessMaterial_6qaon")
+lifetime = 0.5
 
 [node name="FireLocation" type="Node2D" parent="Sprite"]
 position = Vector2(51, 0)

@@ -4,10 +4,6 @@ extends Area2D
 @export var rotate_speed : float = 4
 @export var follow_mouse_speed : float = 20
 
-@export var rotating_tex : Texture2D
-@export var sideways_tex : Texture2D
-@export var upwards_tex : Texture2D
-
 # Gameplay
 @export var max_health := 50.0
 @export var regen_speed := 10.0
@@ -20,10 +16,16 @@ extends Area2D
 @export var mouse_dist_threshold : float
 
 @export var firing_speed : float = 1
-@export var weapon1 : PackedScene
+@export var default_weapon : PackedScene
+@export var multishot_weapon : PackedScene
+@export var powershot_weapon : PackedScene
+@export var bullet_node: NodePath
 var wait_time = 0
 
-@export var bullet_node: NodePath
+
+@export var power_length: float
+
+@export var bullet_type: String = "default"
 
 @export var player := 1 : 
 	set(id): 
@@ -57,10 +59,9 @@ func _process(delta: float) -> void:
 		$Sprite.rotation = global_position.angle_to_point($PlayerInput.target_pos)
 		$Sprite.rotation = lerp_angle(prev_rotation, get_angle_to($PlayerInput.target_pos), delta * follow_mouse_speed * effect)
 	
-	# TODO: Fix this
-	# var rot = abs(fmod($Sprite.rotation, PI / 2))
-	# var uscale = 0.05 * cos(rot - (PI/4))
-	# $Sprite/Sprite.scale.x = 0.15 + uscale
+	var rot = $Sprite.rotation
+	var uscale = abs(cos(rot * 2)) * 0.19
+	$Sprite/Sprite.scale.x = 0.01 + uscale
 	
 	var cspeed = clamp((($PlayerInput.target_pos - position)).length_squared() / pow(mouse_dist, 2), 0, 1) * speed if $PlayerInput.use_mouse else speed
 	var direction_dir = Vector2.from_angle($Sprite.rotation)
@@ -97,8 +98,24 @@ func take_damage(damage):
 
 var bid = 0
 func fire():
-	var bullet = weapon1.instantiate()
-	bullet.rotation = $Sprite.rotation
+	var weapon = null
+	
+	if bullet_type == "multishot":
+		weapon = multishot_weapon
+	elif bullet_type == "powershot":
+		weapon = powershot_weapon
+	else:
+		weapon = default_weapon
+	
+	spawn_bullet(weapon, {})
+	
+	if bullet_type == "multishot":
+		spawn_bullet(weapon, {"rotation": 0.09})
+		spawn_bullet(weapon, {"rotation": -0.09})
+
+func spawn_bullet(type, settings):
+	var bullet = type.instantiate()
+	bullet.rotation = $Sprite.rotation + (settings["rotation"] if settings.has("rotation") else 0)
 	bullet.position = $Sprite/FireLocation.global_position
 	bullet.from_player = player
 	bullet.name = str(player) + "_" + str(bid)
@@ -109,3 +126,21 @@ func pick_up_crate(value):
 	if value == "health":
 		health += max_health / 2
 		health = clamp(health, 0, max_health)
+	if value == "multishot" or value == "powershot":
+		swap_bullet_type(value)
+
+
+func swap_bullet_type(type="default"):
+	if type == "multishot" or type == "powershot":
+		get_tree().create_timer(power_length).connect("timeout", swap_bullet_type)
+	
+	if type == "default":
+		firing_speed = 0.2
+	elif type == "powershot":
+		firing_speed = 0.6
+	elif type == "multishot":
+		firing_speed = 0.15
+	else:
+		firing_speed = 0.2
+	
+	bullet_type = type
