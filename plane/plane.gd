@@ -1,36 +1,52 @@
 extends Area2D
 
+@export_category("Controls")
 @export var speed := 250
 @export var rotate_speed : float = 4
 @export var follow_mouse_speed : float = 20
 
+@export var outof_bounds : Vector4i
+
+@export_group("Mouse")
+@export var mouse_dist : float
+@export var mouse_dist_threshold : float
+
 # Gameplay
+@export_category("Health")
 @export var max_health := 50.0
 @export var regen_speed := 10.0
 
 @export var health = max_health
 
-@export var outof_bounds : Vector4i
-
-@export var mouse_dist : float
-@export var mouse_dist_threshold : float
+@export_category("Weapons")
 
 @export var firing_speed : float = 1
-@export var default_weapon : PackedScene
-@export var multishot_weapon : PackedScene
-@export var powershot_weapon : PackedScene
 @export var bullet_node: NodePath
 var wait_time = 0
-
+var timer = null
 
 @export var power_length: float
 
 @export var bullet_type: String = "default"
 
+
+@export_group("Weapons")
+@export var default_weapon : PackedScene
+@export var multishot_weapon : PackedScene
+@export var powershot_weapon : PackedScene
+
+@export_category("Miscellaneous")
+
 @export var player := 1 : 
 	set(id): 
 		player = id
 		$PlayerInput.set_multiplayer_authority(id)
+
+var animating_color_time = 0
+var animating_color = false
+
+@export var animation_length := 0.4
+@export var color: Color
 
 func _ready():
 	$Health.max_value = max_health
@@ -38,8 +54,8 @@ func _ready():
 	
 	if is_local_player():
 		$Camera2D.make_current()
-	else:
-		$Sprite/Sprite.modulate = Color.CHARTREUSE
+	
+	$Sprite/Sprite.modulate = color
 
 func is_local_player() -> bool:
 	return player == multiplayer.get_unique_id()
@@ -60,8 +76,8 @@ func _process(delta: float) -> void:
 		$Sprite.rotation = lerp_angle(prev_rotation, get_angle_to($PlayerInput.target_pos), delta * follow_mouse_speed * effect)
 	
 	var rot = $Sprite.rotation
-	var uscale = abs(cos(rot * 2)) * 0.19
-	$Sprite/Sprite.scale.x = 0.01 + uscale
+	var uscale = abs(cos(rot * 2)) * 0.28
+	$Sprite/Sprite.scale.x = 0.02 + uscale
 	
 	var cspeed = clamp((($PlayerInput.target_pos - position)).length_squared() / pow(mouse_dist, 2), 0, 1) * speed if $PlayerInput.use_mouse else speed
 	var direction_dir = Vector2.from_angle($Sprite.rotation)
@@ -69,13 +85,26 @@ func _process(delta: float) -> void:
 	position += direction_velocity
 	
 	if wait_time > firing_speed and $PlayerInput.firing:
-		fire()
-		wait_time = 0
+		if multiplayer.is_server():
+			fire()
+			wait_time = 0
 	
 	health += regen_speed * delta
 	health = clamp(health, 0, max_health)
 	$Health.value = health
 	$Health.visible = true if health < max_health else false
+	
+	if animating_color:
+		animating_color_time += delta
+		if animating_color_time < 0.2:
+			$Sprite/Sprite.modulate = lerp(color, Color.RED, (animating_color_time/(animation_length/2)))
+		else:
+			$Sprite/Sprite.modulate = lerp(color, Color.RED, ((animating_color_time-0.2)/(animation_length/2)))
+		
+		if animating_color_time > animation_length:
+			$Sprite/Sprite.modulate = color
+			animating_color = false
+			animating_color_time = 0
 	
 	if health <= 0:
 		die()
@@ -91,10 +120,16 @@ func die():
 	position = Vector2(0, 0)
 	health = max_health
 	$Health.value = health
+	swap_bullet_type("default")
+	
+	$Trail.clear_points()
+	$Trail.curve.clear_points()
+	$Trail2.clear_points()
+	$Trail2.curve.clear_points()
 
 func take_damage(damage):
 	health -= damage
-	$AnimationPlayer.play("damage")
+	animating_color = true
 
 var bid = 0
 func fire():
@@ -118,7 +153,7 @@ func spawn_bullet(type, settings):
 	bullet.rotation = $Sprite.rotation + (settings["rotation"] if settings.has("rotation") else 0)
 	bullet.position = $Sprite/FireLocation.global_position
 	bullet.from_player = player
-	bullet.name = str(player) + "_" + str(bid)
+	bullet.name = str(player) + "_" + str(bid) + "_" + str(randi_range(0, 10000))
 	bid += 1
 	get_node(bullet_node).add_child(bullet, true)
 
@@ -129,15 +164,19 @@ func pick_up_crate(value):
 	if value == "multishot" or value == "powershot":
 		swap_bullet_type(value)
 
-
 func swap_bullet_type(type="default"):
+	if timer:
+		timer.disconnect("timeout", swap_bullet_type)
+		timer = null
+	
 	if type == "multishot" or type == "powershot":
-		get_tree().create_timer(power_length).connect("timeout", swap_bullet_type)
+		timer = get_tree().create_timer(power_length)
+		timer.connect("timeout", swap_bullet_type)
 	
 	if type == "default":
 		firing_speed = 0.2
 	elif type == "powershot":
-		firing_speed = 0.6
+		firing_speed = 0.4
 	elif type == "multishot":
 		firing_speed = 0.15
 	else:

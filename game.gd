@@ -7,13 +7,16 @@ extends Node2D
 @export var crate_types: Array[String]
 @export var crate: PackedScene
 
+@export var background: PackedScene
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_tree().current_scene.set_vignette(self)
-	$Background.get_child(0).vignette = vignette
 	
 	if not multiplayer.is_server():
 		return
+	
+	$Background.add_child(background.instantiate())
 	
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
@@ -25,6 +28,9 @@ func _ready() -> void:
 		add_player(1)
 	
 	new_crate()
+
+func _process(_delta):
+	$Background.get_child(0).vignette = vignette
 
 func new_crate():
 	get_tree().create_timer(crate_time).connect("timeout", new_crate)
@@ -41,6 +47,8 @@ func add_player(id):
 	nplayer.player = id
 	nplayer.name = str(id)
 	nplayer.bullet_node = $Bullets.get_path()
+	var rand = (randf() / 0.8) + 0.1
+	nplayer.color = Color.from_hsv(rand, 1, 1, 1)
 	$Players.add_child(nplayer, true)
 
 func remove_player(id):

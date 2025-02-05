@@ -11,10 +11,9 @@ plane = ExtResource("2_lvitw")
 crate_time = 5.0
 crate_types = Array[String](["health", "multishot", "powershot"])
 crate = ExtResource("3_34whb")
+background = ExtResource("1_aeete")
 
 [node name="Background" type="Node2D" parent="."]
-
-[node name="Background" parent="Background" instance=ExtResource("1_aeete")]
 
 [node name="Players" type="Node2D" parent="."]
 
@@ -22,19 +21,18 @@ crate = ExtResource("3_34whb")
 
 [node name="Crates" type="Node2D" parent="."]
 
-[node name="BackgroundSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://env/background.tscn")
-spawn_path = NodePath("../Background")
-spawn_limit = 1
-
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
-spawn_path = NodePath("../Players")
+[node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://weapons/bullet.tscn", "res://weapons/multishot.tscn", "res://weapons/powershot.tscn")
+spawn_path = NodePath("../Bullets")
 
 [node name="CrateSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://crates/crate.tscn")
 spawn_path = NodePath("../Crates")
 
-[node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://weapons/bullet.tscn")
-spawn_path = NodePath("../Bullets")
+[node name="BackgroundSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://env/background.tscn")
+spawn_path = NodePath("../Background")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://plane/plane.tscn")
+spawn_path = NodePath("../Players")

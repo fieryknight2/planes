@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://byr60n2pw8euj"]
+[gd_scene load_steps=20 format=3 uid="uid://byr60n2pw8euj"]
 
 [ext_resource type="Script" path="res://plane/player.gd" id="1_7iusf"]
 [ext_resource type="Script" path="res://plane/plane.gd" id="1_l6dxp"]
@@ -6,9 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://day8ateb7lrvr" path="res://plane/plane2.png" id="3_h4w56"]
 [ext_resource type="PackedScene" uid="uid://dwxdhkg23e2ua" path="res://weapons/multishot.tscn" id="3_sy2qg"]
 [ext_resource type="PackedScene" uid="uid://g85mjlehip7i" path="res://weapons/powershot.tscn" id="4_6uvsg"]
+[ext_resource type="PackedScene" uid="uid://dg57mgdhgh15d" path="res://plane/trail.tscn" id="6_xb6hv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
-radius = 36.0555
+radius = 52.0384
 
 [sub_resource type="Gradient" id="Gradient_1ln2y"]
 offsets = PackedFloat32Array(0.00215054, 1)
@@ -39,18 +40,20 @@ hue_variation_min = -0.07
 hue_variation_max = 0.04
 collision_mode = 2
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6qaon"]
-particle_flag_disable_z = true
-gravity = Vector3(0, 0, 0)
-scale_min = 2.0
-scale_max = 2.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrsxs"]
+bg_color = Color(1, 0, 0, 1)
 
-[sub_resource type="Animation" id="Animation_hitc3"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb3eu"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q6fh1"]
+
+[sub_resource type="Animation" id="Animation_ty7b3"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/path = NodePath("Sprite/Sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -60,33 +63,27 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_54wsn"]
+[sub_resource type="Animation" id="Animation_m30xp"]
 resource_name = "damage"
-length = 0.2
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/path = NodePath("Sprite/Sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(0.539863, 8.66354e-07, 1.92523e-07, 1), Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_mv22u"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lxk17"]
 _data = {
-"RESET": SubResource("Animation_hitc3"),
-"damage": SubResource("Animation_54wsn")
+"RESET": SubResource("Animation_ty7b3"),
+"damage": SubResource("Animation_m30xp")
 }
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrsxs"]
-bg_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb3eu"]
-bg_color = Color(0, 1, 0, 1)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3bf3"]
 properties/0/path = NodePath(".:position")
@@ -110,6 +107,9 @@ properties/5/replication_mode = 2
 properties/6/path = NodePath(".:firing_speed")
 properties/6/spawn = true
 properties/6/replication_mode = 2
+properties/7/path = NodePath(".:color")
+properties/7/spawn = true
+properties/7/replication_mode = 0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
 properties/0/path = NodePath("PlayerInput:rotation_dir")
@@ -129,16 +129,17 @@ properties/3/replication_mode = 2
 script = ExtResource("1_l6dxp")
 speed = 800
 rotate_speed = 4.5
-follow_mouse_speed = 15.0
-regen_speed = 1.0
+follow_mouse_speed = 4.0
 outof_bounds = Vector4i(-1920, -1080, 1080, 1920)
 mouse_dist = 250.0
 mouse_dist_threshold = 50.0
+regen_speed = 1.0
 firing_speed = 0.2
+power_length = 10.0
 default_weapon = ExtResource("2_b1f6b")
 multishot_weapon = ExtResource("3_sy2qg")
 powershot_weapon = ExtResource("4_6uvsg")
-power_length = 10.0
+color = Color(1, 1, 1, 1)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_43ymf")
@@ -146,47 +147,34 @@ shape = SubResource("CircleShape2D_43ymf")
 [node name="Sprite" type="Node2D" parent="."]
 
 [node name="jet" type="GPUParticles2D" parent="Sprite"]
-position = Vector2(-25, 0)
+process_mode = 4
+visible = false
+position = Vector2(-37, 0)
 rotation = 1.5708
-amount = 25
+amount = 100
 process_material = SubResource("ParticleProcessMaterial_66qst")
 lifetime = 0.2
 visibility_rect = Rect2(-100, 0, 200, 200)
 
 [node name="Sprite" type="Sprite2D" parent="Sprite"]
 rotation = 1.5708
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_h4w56")
 
-[node name="Trails" type="GPUParticles2D" parent="Sprite/Sprite"]
-position = Vector2(-89.9998, 50.0003)
-rotation = -1.5708
-scale = Vector2(5, 5)
-amount = 150
-process_material = SubResource("ParticleProcessMaterial_6qaon")
-lifetime = 0.5
+[node name="TrailPoint1" type="Node2D" parent="Sprite/Sprite"]
+position = Vector2(-103.333, 50)
 
-[node name="Trails2" type="GPUParticles2D" parent="Sprite/Sprite"]
-position = Vector2(85.0002, 49.9997)
-rotation = -1.5708
-scale = Vector2(5, 5)
-amount = 150
-process_material = SubResource("ParticleProcessMaterial_6qaon")
-lifetime = 0.5
+[node name="TrailPoint2" type="Node2D" parent="Sprite/Sprite"]
+position = Vector2(103.333, 50)
 
 [node name="FireLocation" type="Node2D" parent="Sprite"]
-position = Vector2(51, 0)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_mv22u")
-}
+position = Vector2(52, 0)
 
 [node name="Health" type="ProgressBar" parent="."]
 offset_left = -50.0
-offset_top = -45.0
+offset_top = -59.0
 offset_right = 50.0
-offset_bottom = -40.0
+offset_bottom = -54.0
 theme_override_styles/background = SubResource("StyleBoxFlat_rrsxs")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wb3eu")
 value = 50.0
@@ -200,6 +188,20 @@ limit_bottom = 1080
 limit_smoothed = true
 position_smoothing_enabled = true
 editor_draw_limits = true
+
+[node name="Trail" parent="." node_paths=PackedStringArray("point") instance=ExtResource("6_xb6hv")]
+position = Vector2(-16, -32)
+point = NodePath("../Sprite/Sprite/TrailPoint1")
+
+[node name="Trail2" parent="." node_paths=PackedStringArray("point") instance=ExtResource("6_xb6hv")]
+position = Vector2(-15, 30)
+point = NodePath("../Sprite/Sprite/TrailPoint2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_q6fh1"),
+"Planes": SubResource("AnimationLibrary_lxk17")
+}
 
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_w3bf3")

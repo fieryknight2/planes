@@ -79,7 +79,7 @@ func start_game():
 		return
 	
 	var game = default_game.instantiate()
-	$Game/SubViewportContainer/SubViewport.add_child(game)
+	$Game/SubViewportContainer/SubViewport.add_child(game, true)
 	
 	# change_level(default_level)
 

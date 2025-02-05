@@ -14,11 +14,16 @@ func _process(delta: float) -> void:
 	
 	remaining_time += delta
 	if remaining_time >= bullet_existence_time:
-		queue_free()
+		die()
 		return
 	
 	for area in get_overlapping_areas():
 		if area.is_in_group("Players"):
 			if area.get_id() != from_player:
 				area.take_damage(bullet_damage)
-				queue_free()
+				die()
+
+func die():
+	if is_multiplayer_authority():
+		queue_free()
+	

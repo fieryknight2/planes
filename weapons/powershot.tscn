@@ -32,7 +32,7 @@ z_index = -1
 script = ExtResource("1_twpc0")
 bullet_speed = 1800.0
 bullet_damage = 20
-bullet_existence_time = 1.0
+bullet_existence_time = 1.2
 
 [node name="CPUParticles2D" type="GPUParticles2D" parent="."]
 z_index = -2

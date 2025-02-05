@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dg57mgdhgh15d"]
+
+[ext_resource type="Script" path="res://plane/trail.gd" id="1_ephcj"]
+
+[sub_resource type="Curve" id="Curve_bab3e"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.99999, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_517cq"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[node name="Trail" type="Line2D"]
+z_index = -1
+width = 5.0
+width_curve = SubResource("Curve_bab3e")
+gradient = SubResource("Gradient_517cq")
+antialiased = true
+script = ExtResource("1_ephcj")
+max_points = 200

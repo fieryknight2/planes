@@ -1,13 +1,9 @@
-[gd_scene load_steps=28 format=3 uid="uid://bdqdmkq3ek5np"]
+[gd_scene load_steps=23 format=3 uid="uid://bdqdmkq3ek5np"]
 
 [ext_resource type="Script" path="res://env/sun.gd" id="1_2ec1g"]
 [ext_resource type="Script" path="res://env/background.gd" id="1_i73fq"]
-[ext_resource type="Texture2D" uid="uid://dju0lx6pyirvg" path="res://env/clouds/cloud-1.png" id="2_0ycrh"]
 [ext_resource type="Shader" path="res://env/water.gdshader" id="2_hitko"]
-[ext_resource type="Texture2D" uid="uid://cxsfnj4qnfac2" path="res://env/clouds/cloud-2.png" id="3_734a4"]
-[ext_resource type="Texture2D" uid="uid://bil32tdnvy8ct" path="res://env/clouds/cloud-3.png" id="4_q6rqg"]
-[ext_resource type="Texture2D" uid="uid://b87o5es5pmj81" path="res://env/clouds/cloud-4.png" id="5_kpc2h"]
-[ext_resource type="Texture2D" uid="uid://bpd580hhjurj6" path="res://env/clouds/cloud-5.png" id="6_b2bm3"]
+[ext_resource type="PackedScene" uid="uid://0c2wgf5ipax7" path="res://env/cloud.tscn" id="3_g71v4"]
 
 [sub_resource type="Gradient" id="Gradient_tu4xs"]
 colors = PackedColorArray(0.449608, 0.829336, 1, 1, 1, 1, 1, 1)
@@ -20,19 +16,6 @@ use_hdr = true
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 repeat = 1
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_laku5"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(1, 800, 1)
-direction = Vector3(-1, 0, 0)
-spread = 0.0
-flatness = 1.0
-initial_velocity_min = 62.46
-initial_velocity_max = 99.5
-gravity = Vector3(0, 0, 0)
-color = Color(1, 1, 1, 0.8)
-sub_emitter_keep_velocity = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_aw4kx"]
 shader = ExtResource("2_hitko")
@@ -121,6 +104,9 @@ distance = 100.0
 [node name="Outside" type="Node2D" groups=["Level"]]
 script = ExtResource("1_i73fq")
 outside_of_area_damage = 60.0
+cloud_scene = ExtResource("3_g71v4")
+max_cloud_speed = 150
+min_cloud_speed = 50
 
 [node name="Sky" type="Parallax2D" parent="."]
 repeat_times = 3
@@ -139,63 +125,9 @@ script = ExtResource("1_2ec1g")
 size = 256
 color = Color(0.999002, 0.976629, 0.92718, 1)
 
-[node name="CloudsA" type="Parallax2D" parent="."]
+[node name="Clouds" type="Parallax2D" parent="."]
+process_mode = 3
 z_index = 2
-
-[node name="Particles1" type="GPUParticles2D" parent="CloudsA"]
-position = Vector2(2377, -11)
-amount = 2
-process_material = SubResource("ParticleProcessMaterial_laku5")
-texture = ExtResource("2_0ycrh")
-lifetime = 80.0
-preprocess = 60.0
-randomness = 1.0
-visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
-draw_order = 0
-
-[node name="Particles2" type="GPUParticles2D" parent="CloudsA"]
-position = Vector2(2377, 0)
-amount = 2
-process_material = SubResource("ParticleProcessMaterial_laku5")
-texture = ExtResource("3_734a4")
-lifetime = 80.0
-preprocess = 50.0
-randomness = 1.0
-visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
-draw_order = 0
-
-[node name="Particles3" type="GPUParticles2D" parent="CloudsA"]
-position = Vector2(2377, 0)
-amount = 2
-process_material = SubResource("ParticleProcessMaterial_laku5")
-texture = ExtResource("4_q6rqg")
-lifetime = 80.0
-preprocess = 40.0
-randomness = 1.0
-visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
-draw_order = 0
-
-[node name="Particles4" type="GPUParticles2D" parent="CloudsA"]
-position = Vector2(2377, 0)
-amount = 2
-process_material = SubResource("ParticleProcessMaterial_laku5")
-texture = ExtResource("5_kpc2h")
-lifetime = 80.0
-preprocess = 30.0
-randomness = 1.0
-visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
-draw_order = 0
-
-[node name="Particles5" type="GPUParticles2D" parent="CloudsA"]
-position = Vector2(2377, 0)
-amount = 2
-process_material = SubResource("ParticleProcessMaterial_laku5")
-texture = ExtResource("6_b2bm3")
-lifetime = 80.0
-preprocess = 20.0
-randomness = 1.0
-visibility_rect = Rect2(-4400, -1044.39, 4100, 2000)
-draw_order = 0
 
 [node name="Water" type="Parallax2D" parent="."]
 
@@ -247,3 +179,7 @@ shape = SubResource("WorldBoundaryShape2D_s3nm5")
 [node name="Walls" type="CollisionShape2D" parent="Area"]
 position = Vector2(0, 1021)
 shape = SubResource("WorldBoundaryShape2D_r1yp4")
+
+[node name="CloudSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://env/cloud.tscn")
+spawn_path = NodePath("../Clouds")
