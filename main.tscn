@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dthnykqdd4j0y"]
+[gd_scene load_steps=7 format=3 uid="uid://dthnykqdd4j0y"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_dvlhr"]
 [ext_resource type="PackedScene" uid="uid://c2g4mn0tipq0i" path="res://game.tscn" id="2_26cyq"]
 [ext_resource type="PackedScene" uid="uid://bdqdmkq3ek5np" path="res://env/background.tscn" id="2_d1lnq"]
+[ext_resource type="PackedScene" uid="uid://bg7qfofl8bvr" path="res://chat/chat.tscn" id="4_vwya5"]
 
 [sub_resource type="Gradient" id="Gradient_oj5f1"]
 colors = PackedColorArray(1, 1, 1, 0.145098, 1, 0, 0, 0.823529)
@@ -137,14 +138,81 @@ text = "Connect
 "
 
 [node name="StartServer" type="Button" parent="UI/Control/Connect/MarginContainer/VBoxContainer/Buttons"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Start Server
 "
 
+[node name="Play" type="Panel" parent="UI/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -199.5
+offset_top = -50.5
+offset_right = 199.5
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control/Play"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/Play/MarginContainer"]
+layout_mode = 2
+
+[node name="Data" type="HBoxContainer" parent="UI/Control/Play/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayerName" type="LineEdit" parent="UI/Control/Play/MarginContainer/VBoxContainer/Data"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter your name"
+virtual_keyboard_type = 2
+
+[node name="PlayerColor" type="ColorPickerButton" parent="UI/Control/Play/MarginContainer/VBoxContainer/Data"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="Play" type="Button" parent="UI/Control/Play/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Connect
+"
+
+[node name="Chat" parent="UI/Control" instance=ExtResource("4_vwya5")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 517.0
+offset_bottom = 261.0
+grow_horizontal = 1
+grow_vertical = 1
+
 [node name="EnvSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://game.tscn", "res://env/background.tscn")
+_spawnable_scenes = PackedStringArray("res://game.tscn")
 spawn_path = NodePath("../Game/SubViewportContainer/SubViewport")
 
 [connection signal="pressed" from="UI/Control/Connect/MarginContainer/VBoxContainer/Buttons/Connect" to="." method="_on_connect_pressed"]
 [connection signal="pressed" from="UI/Control/Connect/MarginContainer/VBoxContainer/Buttons/StartServer" to="." method="_on_start_server_pressed"]
+[connection signal="text_submitted" from="UI/Control/Play/MarginContainer/VBoxContainer/Data/PlayerName" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="UI/Control/Play/MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

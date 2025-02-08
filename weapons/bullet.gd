@@ -20,7 +20,7 @@ func _process(delta: float) -> void:
 	for area in get_overlapping_areas():
 		if area.is_in_group("Players"):
 			if area.get_id() != from_player:
-				area.take_damage(bullet_damage)
+				area.take_damage(bullet_damage, "player" + str(from_player))
 				die()
 
 func die():

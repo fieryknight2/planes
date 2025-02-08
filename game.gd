@@ -18,14 +18,14 @@ func _ready() -> void:
 	
 	$Background.add_child(background.instantiate())
 	
-	multiplayer.peer_connected.connect(add_player)
-	multiplayer.peer_disconnected.connect(remove_player)
+	# multiplayer.peer_connected.connect(add_player)
+	# multiplayer.peer_disconnected.connect(remove_player)
 	
-	for id in multiplayer.get_peers():
-		add_player(id)
+	# for id in multiplayer.get_peers():
+	# 	add_player(id)
 	
-	if not OS.has_feature("dedicated_server") and not DisplayServer.get_name() == "headless":
-		add_player(1)
+	# if not OS.has_feature("dedicated_server") and not DisplayServer.get_name() == "headless":
+	# 	add_player(1)
 	
 	new_crate()
 
@@ -41,18 +41,17 @@ func new_crate():
 	ncrate.m_type = crate_types.pick_random()
 	$Crates.add_child(ncrate, true)
 
-func add_player(id):
-	print("Player " + str(id) + " has connected")
+func add_player(id, vname, color):
 	var nplayer = plane.instantiate()
 	nplayer.player = id
 	nplayer.name = str(id)
+	nplayer.visual_name = vname
+	Network.players[id] = vname
 	nplayer.bullet_node = $Bullets.get_path()
-	var rand = (randf() / 0.8) + 0.1
-	nplayer.color = Color.from_hsv(rand, 1, 1, 1)
+	nplayer.color = color
 	$Players.add_child(nplayer, true)
 
 func remove_player(id):
-	print("Player " + str(id) + " has disconnected")
 	if not $Players.has_node(str(id)):
 		return
 	$Players.get_node(str(id)).queue_free()
@@ -63,3 +62,7 @@ func _exit_tree():
 		
 	multiplayer.peer_connected.disconnect(add_player)
 	multiplayer.peer_disconnected.disconnect(remove_player)
+
+@rpc("any_peer", "call_local")
+func add_local_player(id, vname, color):
+	add_player(id, vname, color)

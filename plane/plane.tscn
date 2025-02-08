@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dg57mgdhgh15d" path="res://plane/trail.tscn" id="6_xb6hv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_43ymf"]
-radius = 52.0384
+radius = 40.0
 
 [sub_resource type="Gradient" id="Gradient_1ln2y"]
 offsets = PackedFloat32Array(0.00215054, 1)
@@ -39,12 +39,6 @@ color_ramp = SubResource("GradientTexture1D_3b6ou")
 hue_variation_min = -0.07
 hue_variation_max = 0.04
 collision_mode = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrsxs"]
-bg_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb3eu"]
-bg_color = Color(0, 1, 0, 1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_q6fh1"]
 
@@ -85,6 +79,12 @@ _data = {
 "damage": SubResource("Animation_m30xp")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrsxs"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb3eu"]
+bg_color = Color(0, 1, 0, 1)
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3bf3"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -110,6 +110,9 @@ properties/6/replication_mode = 2
 properties/7/path = NodePath(".:color")
 properties/7/spawn = true
 properties/7/replication_mode = 0
+properties/8/path = NodePath(".:visual_name")
+properties/8/spawn = true
+properties/8/replication_mode = 0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b74pb"]
 properties/0/path = NodePath("PlayerInput:rotation_dir")
@@ -139,6 +142,9 @@ power_length = 10.0
 default_weapon = ExtResource("2_b1f6b")
 multishot_weapon = ExtResource("3_sy2qg")
 powershot_weapon = ExtResource("4_6uvsg")
+death_messages = Array[String]([" Player %s was destroyed by natural causes", "Player %s was ended by its poor decisions", "%s didn't want to live anymore", "There are idiots everywhere, aren't there %s"])
+kill_messages = Array[String](["Player %s slew %s mercilessly", "Player %s brutally murdered %s", "%s didn't like the face of %s", "%s was having a bad day and %s crossed it", "%s destroyed %s for fun"])
+visual_name = "<unnamed>"
 color = Color(1, 1, 1, 1)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
@@ -170,16 +176,6 @@ position = Vector2(103.333, 50)
 [node name="FireLocation" type="Node2D" parent="Sprite"]
 position = Vector2(52, 0)
 
-[node name="Health" type="ProgressBar" parent="."]
-offset_left = -50.0
-offset_top = -59.0
-offset_right = 50.0
-offset_bottom = -54.0
-theme_override_styles/background = SubResource("StyleBoxFlat_rrsxs")
-theme_override_styles/fill = SubResource("StyleBoxFlat_wb3eu")
-value = 50.0
-show_percentage = false
-
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_left = -1920
 limit_top = -1080
@@ -202,6 +198,26 @@ libraries = {
 "": SubResource("AnimationLibrary_q6fh1"),
 "Planes": SubResource("AnimationLibrary_lxk17")
 }
+
+[node name="Health" type="ProgressBar" parent="."]
+offset_left = -50.0
+offset_top = -43.0
+offset_right = 50.0
+offset_bottom = -38.0
+theme_override_styles/background = SubResource("StyleBoxFlat_rrsxs")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wb3eu")
+value = 50.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="."]
+offset_left = -64.0
+offset_top = 32.0
+offset_right = 64.0
+offset_bottom = 55.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "<unnamed>"
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_w3bf3")

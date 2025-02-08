@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://iace8oaon31m"]
+
+[node name="Message" type="Label"]
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "<X> slew <Y> by their superior methods"

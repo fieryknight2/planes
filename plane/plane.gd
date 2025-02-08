@@ -31,11 +31,17 @@ var timer = null
 
 
 @export_group("Weapons")
+
 @export var default_weapon : PackedScene
 @export var multishot_weapon : PackedScene
 @export var powershot_weapon : PackedScene
 
 @export_category("Miscellaneous")
+
+@export var death_messages: Array[String]
+@export var kill_messages: Array[String]
+
+@export var visual_name: String
 
 @export var player := 1 : 
 	set(id): 
@@ -44,6 +50,8 @@ var timer = null
 
 var animating_color_time = 0
 var animating_color = false
+
+var last_source
 
 @export var animation_length := 0.4
 @export var color: Color
@@ -56,6 +64,10 @@ func _ready():
 		$Camera2D.make_current()
 	
 	$Sprite/Sprite.modulate = color
+	
+	$Label.text = visual_name
+	if visual_name == "":
+		$Label.text = "<unnamed>"
 
 func is_local_player() -> bool:
 	return player == multiplayer.get_unique_id()
@@ -76,8 +88,8 @@ func _process(delta: float) -> void:
 		$Sprite.rotation = lerp_angle(prev_rotation, get_angle_to($PlayerInput.target_pos), delta * follow_mouse_speed * effect)
 	
 	var rot = $Sprite.rotation
-	var uscale = abs(cos(rot * 2)) * 0.28
-	$Sprite/Sprite.scale.x = 0.02 + uscale
+	var uscale = abs(cos(rot * 2)) * 0.295
+	$Sprite/Sprite.scale.x = 0.005 + uscale
 	
 	var cspeed = clamp((($PlayerInput.target_pos - position)).length_squared() / pow(mouse_dist, 2), 0, 1) * speed if $PlayerInput.use_mouse else speed
 	var direction_dir = Vector2.from_angle($Sprite.rotation)
@@ -117,19 +129,32 @@ func _process(delta: float) -> void:
 			return
 
 func die():
-	position = Vector2(0, 0)
-	health = max_health
-	$Health.value = health
-	swap_bullet_type("default")
+	if !is_multiplayer_authority():
+		return
+		
+	var message = ""
+	if last_source.begins_with("player"):
+		message = kill_messages.pick_random() % [Network.get_user_name(last_source.substr(6, -1)), Network.get_user_name(str(name))]
+	else:
+		message = death_messages.pick_random() % (Network.get_user_name(str(name)))
 	
-	$Trail.clear_points()
-	$Trail.curve.clear_points()
-	$Trail2.clear_points()
-	$Trail2.curve.clear_points()
+	get_tree().current_scene.kill_player.rpc_id(1, str(name), message)
+	
+	# position = Vector2(0, 0)
+	# health = max_health
+	# $Health.value = health
+	# swap_bullet_type("default")
+	
+	# $Trail.clear_points()
+	# $Trail.curve.clear_points()
+	# $Trail2.clear_points()
+	# $Trail2.curve.clear_points()
 
-func take_damage(damage):
+func take_damage(damage, source="natural"):
 	health -= damage
 	animating_color = true
+	
+	last_source = source
 
 var bid = 0
 func fire():

@@ -115,6 +115,16 @@ repeat_times = 3
 z_index = -100
 texture = SubResource("GradientTexture2D_4y1ys")
 
+[node name="Sky2" type="Sprite2D" parent="Sky"]
+z_index = -100
+position = Vector2(3840, 0)
+texture = SubResource("GradientTexture2D_4y1ys")
+
+[node name="Sky3" type="Sprite2D" parent="Sky"]
+z_index = -100
+position = Vector2(-3840, 0)
+texture = SubResource("GradientTexture2D_4y1ys")
+
 [node name="Sun" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0.5, 0.5)
 
@@ -136,7 +146,7 @@ modulate = Color(1, 1, 1, 0.584314)
 top_level = true
 z_index = 2
 position = Vector2(0, 1441)
-scale = Vector2(8, 1)
+scale = Vector2(8.5, 1)
 
 [node name="Wave" type="Polygon2D" parent="Water/WaveSet"]
 texture_repeat = 2
@@ -160,7 +170,7 @@ polygon = PackedVector2Array(-240, 512, -240, -512, -180, -512, -120, -512, -60,
 texture_repeat = 2
 material = SubResource("ShaderMaterial_jnfv5")
 texture = SubResource("GradientTexture2D_prm8q")
-polygon = PackedVector2Array(-240, 512, -240, -480, -180, -480, -120, -480, -60, -480, 0, -480, 60, -480, 120, -480, 180, -480, 240, -480, 240, 512)
+polygon = PackedVector2Array(-240, 512, -240, -480, -180, -480, -120, -480, -60, -480, 0, -480, 60, -480, 120, -480, 180, -480, 240, -480, 240, 7.68896, 240, 512)
 
 [node name="Area" type="Area2D" parent="."]
 
