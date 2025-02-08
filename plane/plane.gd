@@ -131,14 +131,16 @@ func _process(delta: float) -> void:
 func die():
 	if !is_multiplayer_authority():
 		return
-		
+	
+	randomize()
+	
 	var message = ""
 	if last_source.begins_with("player"):
 		message = kill_messages.pick_random() % [Network.get_user_name(last_source.substr(6, -1)), Network.get_user_name(str(name))]
 	else:
 		message = death_messages.pick_random() % (Network.get_user_name(str(name)))
 	
-	get_tree().current_scene.kill_player.rpc_id(1, str(name), message)
+	get_tree().current_scene.kill_player(str(name), message)
 	
 	# position = Vector2(0, 0)
 	# health = max_health

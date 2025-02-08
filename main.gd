@@ -118,7 +118,6 @@ func _on_play_pressed(_val=null) -> void:
 	
 	$Game/SubViewportContainer/SubViewport.get_child(0).add_local_player.rpc_id(1, multiplayer.get_unique_id(), %PlayerName.text, %PlayerColor.color)
 
-@rpc("any_peer", "call_local")
 func kill_player(id, death_message):
 	display_play.rpc_id(int(id))
 	

@@ -80,7 +80,7 @@ func connect_to_server(address, port):
 
 func _on_player_connected(id):
 	print("Player " + str(id) + " has connected")
-	players[id] = id
+	players[id] = "Player" + str(id)
 
 func _on_player_disconnected(id):
 	print("Player " + str(id) + " has disconnected")

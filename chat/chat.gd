@@ -80,4 +80,4 @@ func add_message(message):
 	while $Scroll/Chat.get_child_count() > max_messages:
 		$Scroll/Chat.remove_child($Scroll/Chat.get_child(0))
 
-	$Scroll.scroll_vertical = 1000
+	$Scroll.scroll_vertical = $Scroll/Chat.size.y
