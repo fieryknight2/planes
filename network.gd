@@ -84,6 +84,7 @@ func _on_player_connected(id):
 
 func _on_player_disconnected(id):
 	print("Player " + str(id) + " has disconnected")
+	get_tree().current_scene.remove_player(id)
 	if players.has(id):
 		players.erase(id)
 

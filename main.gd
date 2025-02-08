@@ -122,6 +122,9 @@ func kill_player(id, death_message):
 	display_play.rpc_id(int(id))
 	
 	Network.chat_object.send_message(1, death_message)
+	remove_player(id)
+
+func remove_player(id):
 	$Game/SubViewportContainer/SubViewport.get_child(0).remove_player(id)
 
 @rpc("call_local")

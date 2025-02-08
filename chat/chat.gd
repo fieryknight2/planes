@@ -18,7 +18,7 @@ func clear_chat():
 
 @rpc("call_local")
 func send_global_message(id_from, message):
-	add_message(Network.get_user_name(id_from) + ": " + message)
+	add_message(str(Network.get_user_name(id_from)) + ": " + message)
 
 @rpc
 func send_private_message(id_from, id_to, message):
