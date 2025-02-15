@@ -11,6 +11,8 @@ var player_color = ""
 @export var default_level: PackedScene
 
 func _ready():
+	randomize()
+	
 	if Network.peer == null:
 		get_tree().paused = true
 		Network.disconnect_server()
@@ -52,6 +54,7 @@ func _on_connect_pressed() -> void:
 	
 	$UI/Control/Connect.visible = false
 	$UI/Control/Play.visible = true
+	%PlayerName.grab_focus()
 	
 	start_game()
 
@@ -74,6 +77,7 @@ func _on_start_server_pressed() -> void:
 	
 	if DisplayServer.get_name() != "headless":
 		$UI/Control/Play.visible = true
+		%PlayerName.grab_focus()
 	
 	start_game()
 
@@ -121,7 +125,7 @@ func _on_play_pressed(_val=null) -> void:
 func kill_player(id, death_message):
 	display_play.rpc_id(int(id))
 	
-	Network.chat_object.send_message(1, death_message)
+	Network.chat_object.send_global_message(1, death_message, true)
 	remove_player(id)
 
 func remove_player(id):
@@ -129,4 +133,5 @@ func remove_player(id):
 
 @rpc("call_local")
 func display_play():
-		$UI/Control/Play.visible = true
+	$UI/Control/Play.visible = true
+	%PlayerName.grab_focus()

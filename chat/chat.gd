@@ -17,8 +17,8 @@ func clear_chat():
 		$Scroll/Chat.remove_child($Scroll/Chat.get_child(0))
 
 @rpc("call_local")
-func send_global_message(id_from, message):
-	add_message(str(Network.get_user_name(id_from)) + ": " + message)
+func send_global_message(id_from, message, server=false):
+	add_message((str(Network.get_user_name(id_from)) if !server else "[Server]") + ": " + message)
 
 @rpc
 func send_private_message(id_from, id_to, message):

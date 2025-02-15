@@ -117,8 +117,6 @@ func get_user_name(id):
 		return id
 		
 	id = int(id)
-	if id == 1:
-		return "Server"
 	if Network.players.has(id):
 		return str(Network.players[id])
 	else:
